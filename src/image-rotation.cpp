@@ -39,6 +39,8 @@ int main (){
     // Read input image and allocate memory for output image
     input_img = readBmpFloat("./Images/cat.bmp", &img_rows, &img_cols);
     output_img = (float *) malloc(sizeof(float) * img_rows * img_cols);
+    //for(int i = 0; i < img_rows * img_cols; i++)
+    //  output_img[i] = 1234.0;
 
     try {
         // Create queue
@@ -66,7 +68,7 @@ int main (){
                 float new_col = -1.0f*((float)col)*sin(theta) + ((float)row)*cos(theta);
 
                 // If new row and col are within image bounds set image data from old position to new position
-                if(((int)new_row >= 0) && ((int)new_row < img_cols) && ((int)new_col >= 0) && ((int)new_col < img_rows))
+                if(((int)new_row >= 0) && ((int)new_row < img_rows) && ((int)new_col >= 0) && ((int)new_col < img_cols))
                     output[(int)new_row * img_rows + (int)new_col] = input[row * img_rows + col];
 
             });
