@@ -36,6 +36,10 @@ int main (){
     // Convert angle to radians
     float theta = angle * 3.14159 / 180;
 
+    // Calculate cos and sin of theta
+    float sin_theta = sin(theta);
+    float cos_theta = cos(theta);
+
     // Read input image and allocate memory for output image
     input_img = readBmpFloat("./Images/cat.bmp", &img_rows, &img_cols);
     output_img = (float *) malloc(sizeof(float) * img_rows * img_cols);
@@ -64,8 +68,8 @@ int main (){
                 const int col = item[1];
 
                 // Calculated new row and col after rotation
-                float new_row = ((float)col)*cos(theta) + ((float)row)*sin(theta);
-                float new_col = -1.0f*((float)col)*sin(theta) + ((float)row)*cos(theta);
+                float new_row = ((float)col)*cos_theta + ((float)row)*sin_theta;
+                float new_col = -1.0f*((float)col)*sin_theta + ((float)row)*cos_theta);
 
                 // If new row and col are within image bounds set image data from old position to new position
                 if(((int)new_row >= 0) && ((int)new_row < img_rows) && ((int)new_col >= 0) && ((int)new_col < img_cols))
