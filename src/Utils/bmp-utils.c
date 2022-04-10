@@ -177,7 +177,7 @@ void writeBmpFloat(float *imageOut, const char *filename, int rows, int cols,
    fclose(ofp);
    fclose(ifp);
 
-   free(buffe);
+   free(buffer);
 }
 
 /*

@@ -17,10 +17,10 @@ int main (){
     // Create device selector for the device of your interest.
 #if FPGA_EMULATOR
     // DPC++ extension: FPGA emulator selector on systems without FPGA card.
-    INTEL::fpga_emulator_selector d_selector;
+    ext::intel::fpga_emulator_selector d_selector;
 #elif FPGA || FPGA_PROFILE
     // DPC++ extension: FPGA selector on systems with FPGA card.
-    INTEL::fpga_selector d_selector;
+    ext::intel::fpga_selector d_selector;
 #else
     // The default device selector will select the most performant device.
     default_selector d_selector;
@@ -47,10 +47,7 @@ int main (){
         // Create buffers for input and output images
         buffer<float, 1> input_buffer(input_img, range<1>(img_rows*img_cols));
         buffer<float, 1> output_buffer(output_img, range<1>(img_rows*img_cols));
-
-        // Create range for number of items
-        range<2> num_items{img_rows, img_cols};
-
+	
         q.submit([&](handler &h){
 
             // Create accessors for buffers
@@ -70,7 +67,7 @@ int main (){
 
                 // If new row and col are within image bounds set image data from old position to new position
                 if(((int)new_row >= 0) && ((int)new_row < img_cols) && ((int)new_col >= 0) && ((int)new_col < img_rows))
-                    output[(int)new_col * img_row + (int)new_row] = input[col * img_row + row];
+                    output[(int)new_col * img_rows + (int)new_row] = input[col * img_rows + row];
 
             });
 
