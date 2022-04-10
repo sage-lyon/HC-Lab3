@@ -36,15 +36,13 @@ int main (){
     // Convert angle to radians
     float theta = angle * 3.14159 / 180;
 
-    // Calculate cos and sin of theta
-    float sin_theta = sin(theta);
-    float cos_theta = cos(theta);
-
     // Read input image and allocate memory for output image
     input_img = readBmpFloat("./Images/cat.bmp", &img_rows, &img_cols);
     output_img = (float *) malloc(sizeof(float) * img_rows * img_cols);
-    //for(int i = 0; i < img_rows * img_cols; i++)
-    //  output_img[i] = 1234.0;
+
+    // Get center col and row of image
+    int center_col = img_cols / 2;
+    int center_row = img_rows / 2;
 
     try {
         // Create queue
@@ -54,6 +52,7 @@ int main (){
         buffer<float, 1> input_buffer(input_img, range<1>(img_rows*img_cols));
         buffer<float, 1> output_buffer(output_img, range<1>(img_rows*img_cols));
 	
+        // Create queue submisson
         q.submit([&](handler &h){
 
             // Create accessors for buffers
@@ -68,12 +67,12 @@ int main (){
                 const int col = item[1];
 
                 // Calculated new row and col after rotation
-                float new_row = ((float)col)*cos_theta + ((float)row)*sin_theta;
-                float new_col = -1.0f*((float)col)*sin_theta + ((float)row)*cos_theta);
+                float new_row = ((float)(col - center_col))*cos(theta) + ((float)(row - center_row))*sin(theta);
+                float new_col = -1.0f*((float)(col - center_col))*sin(theta) + ((float)(row - center_row))*cos(theta);
 
                 // If new row and col are within image bounds set image data from old position to new position
                 if(((int)new_row >= 0) && ((int)new_row < img_rows) && ((int)new_col >= 0) && ((int)new_col < img_cols))
-                    output[(int)new_row * img_rows + (int)new_col] = input[row * img_rows + col];
+                    output[(int)new_row * img_cols + (int)new_col] = input[row * img_cols + col];
 
             });
 
