@@ -67,8 +67,8 @@ int main (){
                 const int col = item[1];
 
                 // Calculated new row and col after rotation
-                float new_row = ((float)(col - center_col))*cos(theta) + ((float)(row - center_row))*sin(theta);
-                float new_col = -1.0f*((float)(col - center_col))*sin(theta) + ((float)(row - center_row))*cos(theta);
+                float new_col = ((float)(col - center_col))*cos(theta) + ((float)(-1*row + center_row))*sin(theta) + center_col;
+                float new_row = -1.0f*(-1.0f*((float)(col - center_col))*sin(theta) + ((float)(-1*row + center_row))*cos(theta) - center_row);
 
                 // If new row and col are within image bounds set image data from old position to new position
                 if(((int)new_row >= 0) && ((int)new_row < img_rows) && ((int)new_col >= 0) && ((int)new_col < img_cols))
@@ -91,4 +91,3 @@ int main (){
 
     return 0;
 }
-
