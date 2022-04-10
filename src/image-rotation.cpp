@@ -62,12 +62,12 @@ int main (){
                 const int col = item[1];
 
                 // Calculated new row and col after rotation
-                float new_row = ((float)row)*cos(theta) + ((float)col)*sin(theta);
-                float new_col = -1.0f*((float)row)*sin(theta) + ((float)col)*cos(theta);
+                float new_row = ((float)col)*cos(theta) + ((float)row)*sin(theta);
+                float new_col = -1.0f*((float)col)*sin(theta) + ((float)row)*cos(theta);
 
                 // If new row and col are within image bounds set image data from old position to new position
                 if(((int)new_row >= 0) && ((int)new_row < img_cols) && ((int)new_col >= 0) && ((int)new_col < img_rows))
-                    output[(int)new_col * img_rows + (int)new_row] = input[col * img_rows + row];
+                    output[(int)new_row * img_rows + (int)new_col] = input[row * img_rows + col];
 
             });
 
