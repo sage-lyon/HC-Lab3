@@ -11,7 +11,6 @@
 
 using namespace sycl;
 
-#include "utils.h"
 #include "bmp-utils.h"
 
 int main (){
@@ -27,8 +26,15 @@ int main (){
     default_selector d_selector;
 #endif
 
-    float *input_img, *output_img;
+    float *input_img, *output_img, angle;
     int img_rows, img_cols;
+
+    // Ask user to input angle of rotation for image
+    std::cout << "Enter angle of rotation: " << std::endl;
+    std::cin >> angle;
+
+    // Convert angle to radians
+    float theta = angle * 3.14159 / 180;
 
     // Read input image and allocate memory for output image
     input_img = readBmpFloat("./Images/cat.bmp", &img_rows, &img_cols);
@@ -51,10 +57,14 @@ int main (){
             accessor input(input_buffer, h, read_only);
             accessor output(output_buffer, h, write_only);
 
+            // Submit parallel_for kernel
             h.parallel_for(range<2>(img_rows, img_cols), [=](id<2> item){
+
+                // Assign work item a row and col
                 const int row = item[0];
                 const int col = item[1];
 
+                // Calculated new row and col after rotation
                 float new_row = ((float)row)*cos(theta) + ((float)col)*sin(theta);
                 float new_col = -1.0f*((float)row)*sin(theta) + ((float)col)*cos(theta);
 
@@ -72,6 +82,10 @@ int main (){
         std::cout << "Exception caught for image rotation" << std::endl;
         std::terminate();
     }
+
+    // Store rotated image
+    std::cout << "Rotated image stored as rotated_image.bmp" << std::endl;
+    writeBmpFloat(output_img, "rotated_image.bmp", img_rows, img_cols, "./Images/cat.bmp");
 
     return 0;
 }
